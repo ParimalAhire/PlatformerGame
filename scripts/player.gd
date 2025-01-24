@@ -34,6 +34,8 @@ func _physics_process(delta: float) -> void:
 		
 	if velocity.x == 0:
 		state = STATES.IDLE
+	else:
+		state = STATES.RUNNING
 	
 	# ANIMATION
 	match state:
