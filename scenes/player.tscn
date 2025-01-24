@@ -1,9 +1,10 @@
-[gd_scene load_steps=26 format=3 uid="uid://b0fajs502ix8e"]
+[gd_scene load_steps=28 format=3 uid="uid://b0fajs502ix8e"]
 
 [ext_resource type="Texture2D" uid="uid://ceg57b0kjh7ki" path="res://assets/Sprites/01-King Human/Idle (78x58).png" id="1_44i0u"]
 [ext_resource type="Script" path="res://player.gd" id="1_ow8ty"]
 [ext_resource type="Texture2D" uid="uid://lliqytk3hy3g" path="res://assets/Sprites/01-King Human/Run (78x58).png" id="3_m777a"]
 [ext_resource type="Texture2D" uid="uid://bu28y74i1v2jp" path="res://assets/Sprites/01-King Human/Jump (78x58).png" id="3_umkxx"]
+[ext_resource type="Texture2D" uid="uid://cj6sa8od60f28" path="res://assets/Sprites/01-King Human/Ground (78x58).png" id="4_5ga1t"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_ec2nd"]
 atlas = ExtResource("1_44i0u")
@@ -51,6 +52,10 @@ region = Rect2(780, 0, 78, 58)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_3v5h2"]
 atlas = ExtResource("3_umkxx")
+region = Rect2(0, 0, 78, 58)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_4empo"]
+atlas = ExtResource("4_5ga1t")
 region = Rect2(0, 0, 78, 58)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_k7w5v"]
@@ -135,6 +140,14 @@ animations = [{
 }, {
 "frames": [{
 "duration": 1.0,
+"texture": SubResource("AtlasTexture_4empo")
+}],
+"loop": true,
+"name": &"land",
+"speed": 10.0
+}, {
+"frames": [{
+"duration": 1.0,
 "texture": SubResource("AtlasTexture_k7w5v")
 }, {
 "duration": 1.0,
@@ -170,9 +183,9 @@ script = ExtResource("1_ow8ty")
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 position = Vector2(7, -15)
 sprite_frames = SubResource("SpriteFrames_lqsdq")
-animation = &"jump"
+animation = &"land"
 autoplay = "idle"
-frame_progress = 0.410396
+frame_progress = 0.362757
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="."]
 position = Vector2(0, -3)

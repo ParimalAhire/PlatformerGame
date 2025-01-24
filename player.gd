@@ -1,43 +1,55 @@
 extends CharacterBody2D
 
+@export var MAX_SPEED = 200
+@export var ACCELERATION = 10
+@export var DECELERATION = -40
+@export var GRAVITY = 20
+@export var JUMP_FORCE = 300
+@export var FRICTION = 0.8 * ACCELERATION
 
-const SPEED = 120.0
-const JUMP_VELOCITY = -300.0
+var state
+
+enum STATES { IDLE, RUNNING, JUMPING, FALLING, LANDING}
 
 @onready var animated_sprite: AnimatedSprite2D = $AnimatedSprite2D
 
 func _physics_process(delta: float) -> void:
-	# Add the gravity.
-	if not is_on_floor():
-		velocity += get_gravity() * delta
-
-	# Handle jump.
-	if Input.is_action_just_pressed("ui_accept") and is_on_floor():
-		velocity.y = JUMP_VELOCITY
-
-	# Get the input direction and handle the movement/deceleration.
-	# As good practice, you should replace UI actions with custom gameplay actions.
-	var direction := Input.get_axis("ui_left", "ui_right")
 	
-	# Flip the player
-	if direction > 0:
-		animated_sprite.flip_h = false
-	elif direction < 0:
-		animated_sprite.flip_h = true
+	if not is_on_floor():
+		velocity.y += GRAVITY
+		state = STATES.JUMPING
+	
+	if Input.is_action_pressed("jump") and is_on_floor() :
+		velocity.y -= JUMP_FORCE 
+		print("jumping")
 		
-	# animation
-	if is_on_floor():
-		if direction == 0:
+	if velocity.x > -200:
+		if Input.is_action_pressed("move_left") and is_on_floor():
+			velocity.x = min(velocity.x - ACCELERATION + FRICTION, MAX_SPEED)
+			state = STATES.RUNNING
+	if velocity.x < 200:
+		if Input.is_action_pressed("move_right") and is_on_floor():
+			velocity.x = min(velocity.x + ACCELERATION - FRICTION, MAX_SPEED)
+			state = STATES.RUNNING
+		
+	if velocity.x == 0:
+		state = STATES.IDLE
+	
+	# ANIMATION
+	match state:
+		0:
 			animated_sprite.play("idle")
-		else:
+			print("idle")
+		1:
 			animated_sprite.play("run")
-	else:
-		animated_sprite.play("jump")
-		
-		
-	if direction:
-		velocity.x = direction * SPEED
-	else:
-		velocity.x = move_toward(velocity.x, 0, SPEED)
+			print("running")
+			print(velocity.x)
+		2:
+			animated_sprite.play("jump")
+			print("jumping")
+		4:
+			animated_sprite.play("land")
+			print("landed")
+	
 
 	move_and_slide()
