@@ -22,8 +22,12 @@ func _ready() -> void:
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
-	var target_offset_x = 0.0 
+	if player == null:
+		return  # Avoid errors if player is not found
 
+	var target_offset_x = 0  # Default: No look-ahead
+
+	# Only apply look-ahead if the player exists and is on the ground
 	if player is CharacterBody2D and player.is_on_floor():
 		target_offset_x = clamp(player.velocity.x * lerp_speed, -max_lookahead, max_lookahead)
 	
@@ -205,7 +209,7 @@ sources/0 = SubResource("TileSetAtlasSource_078ob")
 [node name="Game" type="Node2D"]
 
 [node name="Player" parent="." instance=ExtResource("1_fcnuc")]
-position = Vector2(2056, -47)
+position = Vector2(1529, -30)
 collision_layer = 2
 JUMP_FORCE = 400
 
@@ -274,10 +278,8 @@ position = Vector2(1928, -330)
 [node name="Coin10" parent="Coins" instance=ExtResource("5_lebmt")]
 position = Vector2(1911, -330)
 
-[node name="Pigs" type="Node" parent="."]
-
-[node name="Pig" parent="Pigs" instance=ExtResource("7_5jex8")]
+[node name="Pig" parent="." instance=ExtResource("7_5jex8")]
 position = Vector2(2710, -17)
 
-[node name="Pig2" parent="Pigs" instance=ExtResource("7_5jex8")]
+[node name="Slime" parent="." instance=ExtResource("7_5jex8")]
 position = Vector2(1879, -322)

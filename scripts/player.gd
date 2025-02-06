@@ -6,7 +6,8 @@ extends CharacterBody2D
 @export var GRAVITY = 20
 @export var JUMP_FORCE = 500
 @export var FRICTION = 0.7 * ACCELERATION
-@export var JUMP_BUFFER = 60
+@export var JUMP_BUFFER = 30
+@export var MAX_FALL = 350
 
 var state
 
@@ -19,7 +20,7 @@ func _physics_process(delta: float) -> void:
 	JUMP_BUFFER = min(JUMP_BUFFER+1,60)
 	
 	if not is_on_floor():
-		velocity.y += GRAVITY
+		velocity.y =  min(velocity.y + GRAVITY,MAX_FALL)
 		print(velocity.y)
 		if(velocity.y < 0):
 			state = STATES.JUMPING
@@ -39,12 +40,13 @@ func _physics_process(delta: float) -> void:
 	
 	if velocity.x > -200:
 		if Input.is_action_pressed("move_left"):
-			velocity.x = min(velocity.x - ACCELERATION + FRICTION, MAX_SPEED)
+			velocity.x = max(velocity.x - ACCELERATION + FRICTION, -MAX_SPEED)
 			animated_sprite.flip_h = true
 	if velocity.x < 200:
 		if Input.is_action_pressed("move_right"):
 			velocity.x = min(velocity.x + ACCELERATION - FRICTION, MAX_SPEED)
 			animated_sprite.flip_h = false
+	
 	
 	# ANIMATION
 	match state:
